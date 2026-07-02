@@ -1,11 +1,17 @@
 import 'package:flutter/foundation.dart';
+import 'package:hive/hive.dart';
 import 'package:uuid/uuid.dart';
 import '../models/habit.dart';
 
 const _uuid = Uuid();
 
 class HabitProvider extends ChangeNotifier {
-  final List<Habit> _habits = [];
+  final Box<Habit> _box;
+  final List<Habit> _habits;
+
+  HabitProvider({required Box<Habit> box})
+      : _box = box,
+        _habits = box.values.toList();
 
   List<Habit> get habits => List.unmodifiable(_habits);
 
@@ -27,16 +33,19 @@ class HabitProvider extends ChangeNotifier {
   }
 
   void addHabit(String name, {String? description}) {
-    _habits.add(Habit(
+    final habit = Habit(
       id: _uuid.v4(),
       name: name,
       description: description,
-    ));
+    );
+    _habits.add(habit);
+    _box.put(habit.id, habit);
     notifyListeners();
   }
 
   void deleteHabit(String id) {
     _habits.removeWhere((h) => h.id == id);
+    _box.delete(id);
     notifyListeners();
   }
 
@@ -58,6 +67,7 @@ class HabitProvider extends ChangeNotifier {
         completedDates: {...habit.completedDates, normalized},
       );
     }
+    _box.put(id, _habits[index]);
     notifyListeners();
   }
 
