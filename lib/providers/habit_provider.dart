@@ -43,6 +43,18 @@ class HabitProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void editHabit(String id, {String? name, String? description}) {
+    final index = _habits.indexWhere((h) => h.id == id);
+    if (index == -1) return;
+
+    _habits[index] = _habits[index].copyWith(
+      name: name,
+      description: description,
+    );
+    _box.put(id, _habits[index]);
+    notifyListeners();
+  }
+
   void deleteHabit(String id) {
     _habits.removeWhere((h) => h.id == id);
     _box.delete(id);

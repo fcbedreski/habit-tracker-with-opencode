@@ -3,7 +3,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'models/habit.dart';
 import 'providers/habit_provider.dart';
-import 'screens/home_screen.dart';
+import 'screens/main_shell.dart';
 
 class HabitTrackerApp extends StatelessWidget {
   final Box<Habit> box;
@@ -24,7 +24,7 @@ class HabitTrackerApp extends StatelessWidget {
           ),
           useMaterial3: true,
         ),
-        home: const HomeScreen(),
+        home: const MainShell(),
       ),
     );
   }
