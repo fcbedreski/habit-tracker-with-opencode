@@ -27,9 +27,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
         ? null
         : provider.getHabit(_selectedHabitId!);
 
-    return Scaffold(
-      appBar: AppBar(title: const Text('Calendar')),
-      body: Column(
+    return Column(
         children: [
           if (habits.isNotEmpty)
             Padding(
@@ -99,8 +97,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
           const Divider(),
           Expanded(child: _buildDayDetails(habits, selectedHabit)),
         ],
-      ),
-    );
+      );
   }
 
   Widget _buildDayDetails(List<Habit> habits, Habit? selectedHabit) {
