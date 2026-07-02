@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
+import 'models/habit.dart';
 import 'providers/habit_provider.dart';
 import 'screens/home_screen.dart';
 
 class HabitTrackerApp extends StatelessWidget {
-  const HabitTrackerApp({super.key});
+  final Box<Habit> box;
+
+  const HabitTrackerApp({super.key, required this.box});
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => HabitProvider(),
+      create: (_) => HabitProvider(box: box),
       child: MaterialApp(
         title: 'Habit Tracker',
         debugShowCheckedModeBanner: false,
