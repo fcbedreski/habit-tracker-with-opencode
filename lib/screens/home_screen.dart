@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../providers/habit_provider.dart';
 import '../widgets/habit_tile.dart';
 import 'add_habit_screen.dart';
+import 'calendar_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -25,6 +26,16 @@ class HomeScreen extends StatelessWidget {
             ),
           ],
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.calendar_month),
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => const CalendarScreen()),
+              );
+            },
+          ),
+        ],
       ),
       body: Consumer<HabitProvider>(
         builder: (context, provider, _) {
