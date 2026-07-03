@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/habit_provider.dart';
-import '../widgets/habit_tile.dart';
+import '../widgets/drop_zone.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -33,18 +33,48 @@ class HomeScreen extends StatelessWidget {
           );
         }
 
-        return ListView.builder(
-          padding: const EdgeInsets.only(top: 8, bottom: 80),
-          itemCount: habits.length,
-          itemBuilder: (context, index) {
-            final habit = habits[index];
-            return HabitTile(
-              habit: habit,
-              isCompletedToday: habit.isCompletedOn(today),
-              onToggle: () => provider.toggleHabit(habit.id, today),
-              onDelete: () => provider.deleteHabit(habit.id),
-            );
-          },
+        final todo = habits.where((h) => !h.isCompletedOn(today)).toList();
+        final done = habits.where((h) => h.isCompletedOn(today)).toList();
+
+        final theme = Theme.of(context);
+
+        return Column(
+          children: [
+            Flexible(
+              flex: todo.isEmpty ? 0 : 1,
+              fit: todo.isEmpty ? FlexFit.loose : FlexFit.tight,
+              child: DropZone(
+                title: 'To Do',
+                icon: Icons.radio_button_unchecked,
+                color: theme.colorScheme.primary,
+                habits: todo,
+                isDone: false,
+                onHabitDropped: (habit) {
+                  provider.toggleHabit(habit.id, today);
+                },
+              ),
+            ),
+            if (todo.isNotEmpty && done.isNotEmpty)
+              Container(
+                height: 2,
+                margin: const EdgeInsets.symmetric(horizontal: 24),
+                color: Colors.grey.shade200,
+              ),
+            Flexible(
+              flex: done.isEmpty ? 0 : 1,
+              fit: done.isEmpty ? FlexFit.loose : FlexFit.tight,
+              child: DropZone(
+                title: 'Done',
+                icon: Icons.check_circle,
+                color: Colors.teal,
+                habits: done,
+                isDone: true,
+                onHabitDropped: (habit) {
+                  provider.toggleHabit(habit.id, today);
+                },
+              ),
+            ),
+          ],
         );
       },
     );
